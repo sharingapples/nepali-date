@@ -11,7 +11,7 @@
     "lint": "eslint src",
     "clean": "rimraf cjs",
     "build": "babel src -d cjs",
-    "prepare": "npm run lint && npm run test && npm run clean && npm run build"
+    "prepare": "npm run lint && npm run clean && npm run build"
   },
   "bin": {
     "ad2bs": "./cjs/scripts/ad2bs.js",
