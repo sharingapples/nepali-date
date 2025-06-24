@@ -17,7 +17,7 @@ describe('NepaliDate', () => {
     expect(n.toString()).toBe('2038/7/15');
     const n2 = new NepaliDate('2075.03.22');
     expect(n2.toString()).toBe('2075/3/22');
-    expect(n2.getEnglishDate()).toEqual(new Date('2018/07/06'));
+    expect(n2.getEnglishDate()).toEqual(new Date('2018-07-05T18:30:00.000Z'));
   });
 
   it('checks format', () => {
