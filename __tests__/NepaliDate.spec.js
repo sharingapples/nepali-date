@@ -61,6 +61,13 @@ describe('NepaliDate', () => {
     expect(new NepaliDate('2083-07-07').getEnglishDate()).toEqual(new Date(2026, 9, 24));
   });
 
+  it('converts dates in the first year of the table (2000 BS)', () => {
+    expect(new NepaliDate(new Date(1943, 3, 14)).toString()).toBe('2000/1/1');
+    expect(new NepaliDate(new Date(1944, 3, 12)).toString()).toBe('2000/12/31');
+    expect(new NepaliDate(new Date(1944, 3, 13)).toString()).toBe('2001/1/1');
+    expect(new NepaliDate('2000-01-01').getEnglishDate()).toEqual(new Date(1943, 3, 14));
+  });
+
   it('keeps the local calendar day at any time of day', () => {
     expect(new NepaliDate(new Date(2025, 6, 16, 0, 0)).toString()).toBe('2082/3/32');
     expect(new NepaliDate(new Date(2025, 6, 16, 23, 59)).toString()).toBe('2082/3/32');
