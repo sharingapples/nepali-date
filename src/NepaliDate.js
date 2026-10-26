@@ -3,6 +3,11 @@ import format from './format';
 
 const SUM_IDX = 14;
 
+// Day math uses calendar fields, not milliseconds: the local UTC offset may differ
+// between 1943 and today (Nepal +5:30 -> +5:45, DST zones), which shifted dates by a day.
+const epoch = new Date(EPOCH);
+const epochPlus = days => new Date(epoch.getFullYear(), epoch.getMonth(), epoch.getDate() + days);
+
 function parse(dateString) {
   // Expected date formats are yyyy-mm-dd, yyyy.mm.dd yyyy/mm/dd
   const parts = dateString.split(/[-./]/, 3);
@@ -65,7 +70,8 @@ class NepaliDate {
 
   setEnglishDate(date) {
     this.timestamp = date;
-    let daysCount = Math.floor((this.timestamp - EPOCH) / 86400000);
+    let daysCount = (Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())
+      - Date.UTC(epoch.getFullYear(), epoch.getMonth(), epoch.getDate())) / 86400000;
     // Look for a index based on number of days since epoch.
     // it is just to save some iterations searching from idx 0.
     // So dividing by a number slightly higher than number of days in a year (365.25)
@@ -159,7 +165,7 @@ class NepaliDate {
       d += tmp[i + 1];
     }
     d += date - 1;
-    this.setEnglishDate(new Date(EPOCH + d * 86400000));
+    this.setEnglishDate(epochPlus(d));
   }
 
   format(formatStr) {
@@ -173,7 +179,6 @@ class NepaliDate {
 }
 
 NepaliDate.minimum = () => new Date(EPOCH);
-NepaliDate.maximum = () => new Date(EPOCH
-  + ((NEPALI_DATE_MAP[NEPALI_DATE_MAP.length - 1][SUM_IDX]) * 86400000));
+NepaliDate.maximum = () => epochPlus(NEPALI_DATE_MAP[NEPALI_DATE_MAP.length - 1][SUM_IDX]);
 
 export default NepaliDate;

@@ -52,6 +52,20 @@ describe('NepaliDate', () => {
     expect(n2.toString()).toBe('2074/12/29');
   });
 
+  it('checks 2081 - 2083 month lengths', () => {
+    expect(new NepaliDate('2081-02-32').toString()).toBe('2081/2/32');
+    expect(new NepaliDate('2082-03-32').toString()).toBe('2082/3/32');
+    expect(new NepaliDate(new Date(2024, 5, 15)).toString()).toBe('2081/3/1');
+    expect(new NepaliDate(new Date(2025, 6, 17)).toString()).toBe('2082/4/1');
+    expect(new NepaliDate(new Date(2026, 9, 24)).toString()).toBe('2083/7/7');
+    expect(new NepaliDate('2083-07-07').getEnglishDate()).toEqual(new Date(2026, 9, 24));
+  });
+
+  it('keeps the local calendar day at any time of day', () => {
+    expect(new NepaliDate(new Date(2025, 6, 16, 0, 0)).toString()).toBe('2082/3/32');
+    expect(new NepaliDate(new Date(2025, 6, 16, 23, 59)).toString()).toBe('2082/3/32');
+  });
+
   it('checks for all methods', () => {
     const d = new Date('2017-10-31T12:30:25.789');
     const n = new NepaliDate(d);
