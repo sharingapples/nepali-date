@@ -80,7 +80,10 @@ class NepaliDate {
       idx += 1;
     }
 
-    daysCount -= NEPALI_DATE_MAP[idx - 1][SUM_IDX];
+    // The first year (idx 0) has no previous year to subtract
+    if (idx > 0) {
+      daysCount -= NEPALI_DATE_MAP[idx - 1][SUM_IDX];
+    }
     const tmp = NEPALI_DATE_MAP[idx];
 
     // eslint-disable-next-line prefer-destructuring

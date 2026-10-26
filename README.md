@@ -24,7 +24,13 @@ Total		365.259
 
 Since, the nepali calendar didn't follow this closely. We have to use
 a map based implementation. So, the library would work only within a
-certain period of time. At the moment it works between **2000 BS** to **2100 BS**.
+certain period of time. At the moment it works between **2000 BS** and **2088 BS**
+(1943-04-14 to 2032-04-13 AD).
+
+Dates up to **2083 BS** follow the published calendars. The calendar for each
+year is approved only a few months before it starts, so **2084 BS onwards are
+projections** and may change in a patch release once the official calendar
+for that year is published.
 
 # Installation
 > `$ yarn add nepali-date`
