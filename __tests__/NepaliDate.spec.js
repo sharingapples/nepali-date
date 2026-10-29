@@ -82,4 +82,24 @@ describe('NepaliDate', () => {
     expect(d.getSeconds()).toBe(d.getSeconds());
     expect(d.getMilliseconds()).toBe(d.getMilliseconds());
   });
+
+  it('converts UTC midnight dates without timezone drift', () => {
+    expect(new NepaliDate(new Date('2018-08-17T00:00:00.000Z')).toString()).toBe('2075/5/1');
+    expect(new NepaliDate(new Date('2024-06-15T00:00:00.000Z')).toString()).toBe('2081/3/1');
+  });
+
+  it('supports NepaliDate.maximum() without out-of-bounds error', () => {
+    const max = NepaliDate.maximum();
+    const n = new NepaliDate(max);
+    expect(n.getYear()).toBe(2088);
+    expect(n.getMonth()).toBe(11);
+    expect(n.getDate()).toBe(30);
+  });
+
+  it('throws an error for dates out of supported range', () => {
+    expect(() => new NepaliDate(new Date(1940, 0, 1))).toThrow('Nepal date out of range');
+    expect(() => new NepaliDate(new Date(2040, 0, 1))).toThrow('Nepal date out of range');
+    expect(() => new NepaliDate(1999, 0, 1)).toThrow('Nepal year out of range');
+    expect(() => new NepaliDate(2089, 0, 1)).toThrow('Nepal year out of range');
+  });
 });

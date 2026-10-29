@@ -8,6 +8,10 @@ const SUM_IDX = 14;
 const epoch = new Date(EPOCH);
 const epochPlus = days => new Date(epoch.getFullYear(), epoch.getMonth(), epoch.getDate() + days);
 
+const getDayComponents = d => (d.getTime() % 86400000 === 0 && d.getTimezoneOffset() !== 0
+  ? [d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()]
+  : [d.getFullYear(), d.getMonth(), d.getDate()]);
+
 function parse(dateString) {
   // Expected date formats are yyyy-mm-dd, yyyy.mm.dd yyyy/mm/dd
   const parts = dateString.split(/[-./]/, 3);
@@ -70,8 +74,12 @@ class NepaliDate {
 
   setEnglishDate(date) {
     this.timestamp = date;
-    let daysCount = (Date.UTC(date.getFullYear(), date.getMonth(), date.getDate())
+    const [year, month, day] = getDayComponents(date);
+    let daysCount = (Date.UTC(year, month, day)
       - Date.UTC(epoch.getFullYear(), epoch.getMonth(), epoch.getDate())) / 86400000;
+    if (daysCount < 0 || daysCount >= NEPALI_DATE_MAP[NEPALI_DATE_MAP.length - 1][SUM_IDX]) {
+      throw new Error('Nepal date out of range');
+    }
     // Look for a index based on number of days since epoch.
     // it is just to save some iterations searching from idx 0.
     // So dividing by a number slightly higher than number of days in a year (365.25)
@@ -158,6 +166,9 @@ class NepaliDate {
 
   set(year, month, date) {
     const idx = (year + Math.floor(month / 12)) - START_YEAR;
+    if (idx < 0 || idx >= NEPALI_DATE_MAP.length) {
+      throw new Error('Nepal year out of range');
+    }
     const tmp = NEPALI_DATE_MAP[idx];
     let d = tmp[SUM_IDX] - tmp[SUM_IDX - 1];
 
@@ -182,6 +193,6 @@ class NepaliDate {
 }
 
 NepaliDate.minimum = () => new Date(EPOCH);
-NepaliDate.maximum = () => epochPlus(NEPALI_DATE_MAP[NEPALI_DATE_MAP.length - 1][SUM_IDX]);
+NepaliDate.maximum = () => epochPlus(NEPALI_DATE_MAP[NEPALI_DATE_MAP.length - 1][SUM_IDX] - 1);
 
 export default NepaliDate;
